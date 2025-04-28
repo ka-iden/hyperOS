@@ -2,7 +2,8 @@
 
 Making a little bootloader OS to test out some assembly.
 
-> [!CAUTION] Abandon All Hope, Ye Who Enter Here  
+> [!CAUTION]
+> Abandon All Hope, Ye Who Enter Here
 > This project is a work in progress and will probably stay a work in progress forever. Expect to not see many commits or updates often, as this is a project that I will easily burn out on. See my [last attempt] for reference.
 
 ## Features
