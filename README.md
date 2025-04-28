@@ -8,7 +8,10 @@ Making a little bootloader OS to test out some assembly.
 
 ## Features
 
-- Absolutely nothing yet!
+- Printing strings via function
+- Handling keyboard inputs and printing characters
+- Handling special keypress cases such as moving the cursor using the arrow keys, enter to move to the next line, and the backspace key to move back and delete the last character.  
+**Note that I am writing directly to video memory, so I am unable to actually see what is there.**
 
 ## Tools
 
