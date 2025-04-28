@@ -2,25 +2,30 @@
 ; Created: 18/06/2023
 ; Last updated: 29/04/2025
 ; Changelog:
-; Removed hex and decimal printing functions.
+; - Removed hex and decimal printing functions.
+; - Converted macros to functions.
 
-; Macro to print a string, then print a new line.
-%macro sprintLn 1
-	mov bx, %1
+; Functions to print a string, replaced the macros for higher code efficiency.
+sprint:
+	pusha
+	call sprintf
+	popa
+	ret
+
+sprintLn:
+	pusha
 	call sprintf
 	mov bx, newLineString
 	call sprintf
-%endmacro
-; Alternative, no new line.
-%macro sprint 1
-	mov bx, %1
-	call sprintf
-%endmacro
+	popa
+	ret
 
-%macro newLine 0
+newLine:
+	pusha
 	mov bx, newLineString
 	call sprintf
-%endmacro
+	popa
+	ret
 
 ; Let's create a function that can print a string.
 sprintf:

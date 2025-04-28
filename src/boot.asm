@@ -37,11 +37,15 @@ start:
 	int 0x10 ; Call BIOS Interrupt
 	mov ah, 0x0e ; TTY (TeleTYpewriter) mode
 
-	sprintLn lines ; Macro to print: ====================
-	sprintLn string1 ; Welcome to My OS!
-	sprintLn string2 ; You can type in here, and press enter to restart the system!
-	sprintLn lines ; ====================
-	newLine ; New line macro, wraps around sprintLn
+	mov bx, lines ; Function to print: ====================
+	call sprintLn ; Call the print function
+	mov bx, string1 ; Function to print: Welcome to My OS!
+	call sprintLn ; Call the print function
+	mov bx, string2 ; Function to print: You can type in here, and press enter to restart the system!
+	call sprintLn ; Call the print function
+	mov bx, lines ; Function to print: ====================
+	call sprintLn ; Call the print function
+	call newLine ; New line function, wraps around sprintLn
 
 	mov ah, 0x01 ; Tell BIOS Interrupt to set cursor type
 	mov ch, 0x00 ; Cursor start line
@@ -80,7 +84,7 @@ loop:
 	int 0x19 ; Reboot
 
 handleEnter:
-	newLine ; New line macro
+	call newLine ; New line macro
 
 	mov byte [cursorCol], 0 ; Reset column to 0
 	inc byte [cursorRow]    ; Move cursor down one row
