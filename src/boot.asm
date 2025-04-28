@@ -1,8 +1,12 @@
 ; Clean-looking Bootloader
 ; Created: 25/06/2023
 ; Last Updated: 29/04/2025
-; Changelog: Removed hex and decimal printing functions.
-; Todo: Will work more on a generic typing program.
+; Changelog:
+; - Removed hex and decimal printing functions.
+; - Added cursor position tracking and movement functions.
+; - Added custom behaviour on special key presses. Works well with typing to my standard.
+; Todo:
+; - Move to 32 bit mode, and add a 32-bit bootloader.
 
 use16 ; Use 16-bit mode
 org 0x7c00 ; Set the origin to 0x7c00
