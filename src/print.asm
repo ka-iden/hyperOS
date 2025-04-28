@@ -5,20 +5,20 @@
 ; Removed hex and decimal printing functions.
 
 ; Macro to print a string, then print a new line.
-%macro sprintLn 1 
+%macro sprintLn 1
 	mov bx, %1
 	call sprintf
-	mov bx, newLine
+	mov bx, newLineString
 	call sprintf
 %endmacro
 ; Alternative, no new line.
-%macro sprint 1 
+%macro sprint 1
 	mov bx, %1
 	call sprintf
 %endmacro
 
 %macro newLine 0
-	mov bx, newLine
+	mov bx, newLineString
 	call sprintf
 %endmacro
 
@@ -37,5 +37,4 @@ sprintf:
 	popa
 	ret
 
-newLine: db 0x0a, 0x0d, 0 ; New line, Carriage return, null terminator
-hexPrefix: db '0x', 0 ; Hex prefix - purely for visual
+newLineString: db 0x0a, 0x0d, 0 ; New line, Carriage return, null terminator
