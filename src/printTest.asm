@@ -1,4 +1,4 @@
-; Clean-looking Bootloader
+; Printing Test
 ; Created: 25/06/2023
 ; Last Updated: 29/04/2025
 ; Changelog:
@@ -6,10 +6,11 @@
 ; - Added cursor position tracking and movement functions.
 ; - Added custom behaviour on special key presses. Works well with typing to my standard.
 
-use16 ; Use 16-bit mode
-org 0x7c00 ; Set the origin to 0x7c00
+	use16 ; Use 16-bit mode
+	org 0x7c00 ; Set the origin to 0x7c00
 
-jmp start
+	jmp start
+
 %include "src/print.asm"
 start:
 	; Set Video Mode
