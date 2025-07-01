@@ -24,15 +24,10 @@ start:
 	; Set Colours
 	; AH sets Colour Palette Registers
 	; See https://stanislavs.org/helppc/int_10-b.html for BL & BH values
-	; Colour Values:
-	; Black	- 0x00	Dark Gray	- 0x08	Blue		- 0x01	Light Blue		- 0x09
-	; Green	- 0x02	Light Green	- 0x0a	Cyan		- 0x03	Light Cyan		- 0x0b
-	; Red	- 0x04	Light Red	- 0x0c	Magenta		- 0x05	Light Magenta	- 0x0d
-	; Brown	- 0x06	Light Brown	- 0x0e	Light Gray	- 0x07	White			- 0x0f
 
 	mov ah, 0x0b ; Tell BIOS Interrupt to set colour registers
-	mov bh, 0x00 ; Colour Value Select
-	mov bl, 0x01 ; Set bacground colour to Blue
+	mov bh, 0x00 ; 0 to set background and border colour, 1 to select colour palette
+	mov bl, 0x01 ; Colour value when BH is 0, Palette value when BH = 1
 	int 0x10 ; Call BIOS Interrupt
 	mov ah, 0x0e ; TTY (TeleTYpewriter) mode
 
@@ -76,7 +71,8 @@ loop:
 	int 0x10 ; Call BIOS Interrupt
 	inc byte [cursorCol]
 
-	; Any ASCII table will do, but this is the one I used: https://www.rapidtables.com/code/text/ascii-table.html
+	; Any ASCII table will do, but this is the one I used:
+	; https://www.rapidtables.com/code/text/ascii-table.html
 	cmp al, 0x1b ; Check if escape key was pressed
 	jne loop ; If enter key was pressed, end program
 	
