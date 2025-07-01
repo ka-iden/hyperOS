@@ -31,8 +31,6 @@ startReal: ; Any code that needs to be run once goes below here and above the lo
 	call sprintLn16 ; Call the print function
 
 	; Time to enter protected mode.
-	mov [bootDisk], dl
-
 	cli ; Clear interrupts
 	lgdt [GDTDescriptor] ; Move the GDT descriptor into the special gdtr register
 	mov eax, cr0 ; Move control register to eax
@@ -42,6 +40,11 @@ startReal: ; Any code that needs to be run once goes below here and above the lo
 
 bits16: db 'Currently in 16-bit mode.', 0
 
+; The GDT Descriptor is very weird and obscure and took me forever to understand, and I had to do a
+; lot of googling and watching videos to explain it, so to save you a bit of time, here are two
+; resources that helped me immensely:
+; https://wiki.osdev.org/Babystep6
+; https://www.youtube.com/watch?v=Wh5nPn2U_1w
 GDTStart: ; Must be at the end of real mode code.
 nullDescriptor:
 	dd 0x0, 0x0 ; First two bytes are null
@@ -91,13 +94,12 @@ dataDescriptor:
 	db 0x0
 
 GDTEnd:
-
 GDTDescriptor:
 	dw GDTEnd - GDTStart - 1 ; Last byte in GDT table
 	dd GDTStart ; Start of GDT table
 
-CODE_SEG equ codeDescriptor - GDTStart
-DATA_SEG equ dataDescriptor - GDTStart
+CODE_SEG equ codeDescriptor - GDTStart ; Code segment and data segment locations are defined at
+DATA_SEG equ dataDescriptor - GDTStart ; assemble-time to allow changes to code above.
 
 	use32 ; Use 32-bit mode, aka protected mode
 
@@ -107,20 +109,18 @@ startProtected:
 	add edi, 160 * 1 ; Skip the first line to preserve our original message
 
 .print_line:
-	lodsb
-	cmp al, 0
-	je .done
+	lodsb ; Loads single byte located in esi into the eax register
+	cmp al, 0 ; Check if null byte is located
+	je .done ; If so, stop printing and hang
 	mov ah, 0x07 ; Set the colour to light grey, to match the 16-bit printing.
-	mov [edi], ax
-	add edi, 2
-	jmp .print_line
+	mov [edi], ax ; Move character into memory location of the cursor in video memory
+	add edi, 2 ; Move the cursor right
+	jmp .print_line ; Similar to a while true loop with a return at the top, no upper limit.
 
 .done:
-	jmp $
+	jmp $ ; Hang
 	
 bits32 db "Now in 32-bit mode!", 0
-
-bootDisk: db 0
 
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig
