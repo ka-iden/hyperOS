@@ -11,7 +11,7 @@
 
 	jmp start
 
-%include "src/print.asm"
+%include "src/print16.asm"
 start:
 	; Set Video Mode
 	; AL sets Size & Palette Registers
@@ -37,14 +37,14 @@ start:
 	mov ah, 0x0e ; TTY (TeleTYpewriter) mode
 
 	mov bx, lines ; Function to print: ====================
-	call sprintLn ; Call the print function
+	call sprintLn16 ; Call the print function
 	mov bx, string1 ; Function to print: Welcome to My OS!
-	call sprintLn ; Call the print function
+	call sprintLn16 ; Call the print function
 	mov bx, string2 ; Function to print: You can type in here, and press enter to restart the system!
-	call sprintLn ; Call the print function
+	call sprintLn16 ; Call the print function
 	mov bx, lines ; Function to print: ====================
-	call sprintLn ; Call the print function
-	call newLine ; New line function, wraps around sprintLn
+	call sprintLn16 ; Call the print function
+	call newLine16 ; New line function, wraps around sprintLn
 
 	mov ah, 0x01 ; Tell BIOS Interrupt to set cursor type
 	mov ch, 0x00 ; Cursor start line
@@ -83,7 +83,7 @@ loop:
 	int 0x19 ; Reboot
 
 handleEnter:
-	call newLine ; New line macro
+	call newLine16 ; New line macro
 
 	mov byte [cursorCol], 0 ; Reset column to 0
 	inc byte [cursorRow]    ; Move cursor down one row
