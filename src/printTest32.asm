@@ -1,6 +1,10 @@
 ; Printing Test
 ; Created: 3/07/2025
 ; Last Updated: 3/07/2025
+; Changelog:
+; - Implemented 32-bit printing
+; - Takes keyboard input, prints as hex
+; - Keyboard input now is printed to the screen - currently very simple with no caps
 ; CURRENT BUGS:
 ; - lshift is printing backslash?? when holding down backslash, it properly repeats, but holding
 ; lshift only places one backslash, i'm going to make note of that.
