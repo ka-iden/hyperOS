@@ -1,6 +1,9 @@
 ; Printing Test
 ; Created: 3/07/2025
 ; Last Updated: 3/07/2025
+; CURRENT BUGS:
+; - lshift is printing backslash?? when holding down backslash, it properly repeats, but holding
+; lshift only places one backslash, i'm going to make note of that.
 
 	use16
 	org 0x7c00
@@ -28,18 +31,58 @@ DATA_SEG equ dataDescriptor - GDT
 
 	use32
 
-%include "src/print32.asm"
+printChar32:
+    pusha
+    mov ebx, [screenOffset] ; Current offset in VGA memory
+    mov edx, 0xB8000 ; VGA base address
+    mov ah, 0x07 ; Light grey on black
+    mov [edx + ebx], ax ; Write character and attribute
+    add ebx, 2 ; advance cursor by one character (2 bytes)
+    mov [screenOffset], ebx ; save new offset
+    popa
+    ret
+
+; I spent a very, very long time working this out with a LOT of trial and error and a few
+; resources here:
+; https://stackoverflow.com/questions/61124564/convert-scancodes-to-ascii
+; https://commons.wikimedia.org/wiki/File:Ps2_de_keyboard_scancode_set_2.svg
+; https://image1.slideserve.com/1839050/ps2-keyboard-scan-codes-n.jpg
+; https://www.rapidtables.com/code/text/ascii-table.html
+; Most of the codes could be copied from a pre-existing table, but for some reason some keys didn't
+; follow the thing? with a LOT of trial and error I found out that the PS/2 keyboard's third row is
+; laid out like "..., k, l, ;, ', `, lshift, \". Also ' is 39, ` is 96.
+scancodeToAscii db 0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',  0
+				db     0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',  0
+				db      0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 39,  96, '\\'
+				db          'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',  0
+				db        0,  0,  ' ',  0,   0,   0,   0,   0,   0
+
 start: ; Start of actual bootloader
+loop:
+.wait:
+	in al, 0x64 ; Read keyboard controller status register
+	test al, 1 ; Check if buffer full
+	jz .wait ; If not, keep waiting
 
-	mov esi, myString ; String to print
-	mov edi, screen_offset ; Pointer to offset
-	mov ah, 0x07 ; Light grey on black
-	call sprintLn32
+	in al, 0x60 ; Read scancode from 0x60
+	cmp al, 0x80 ; Check if scancode is break code 
+	jnb loop ; If so, ignore and start again
 
-	jmp $ ; Hang
+	cmp al, 0x3F ; Check if scancode is > 63
+	ja loop ; Ignore if out of LUT range
 
-myString db "Welcome to 32-bit mode!", 0
-screen_offset dd 0
+	movzx eax, al ; Make sure scancode is safe for comp
+	mov bl, [scancodeToAscii + eax] ; Properly handle ASCII
+
+	cmp bl, 0 ; Check if LUT returns 0
+	je loop ; If so, start again
+
+	mov al, bl ; Move ASCII char to al
+	call printChar32 ; Print character
+
+	jmp loop ; Start again :D
+
+screenOffset dd 0 ; Offset from start of video memory
 
 	times 510 - ($-$$) db 0
 	dw 0xaa55
