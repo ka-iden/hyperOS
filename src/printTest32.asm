@@ -5,15 +5,26 @@
 ; - Implemented 32-bit printing
 ; - Takes keyboard input, prints as hex
 ; - Keyboard input now is printed to the screen - currently very simple with no caps
+; - Added A20 line
+; TODO:
+; - Set up the IDT
 ; CURRENT BUGS:
 ; - lshift is printing backslash?? when holding down backslash, it properly repeats, but holding
 ; lshift only places one backslash, i'm going to make note of that.
+
+
+; TODO:
+; - Set up the IDT
 
 	use16
 	org 0x7c00
 
 	mov ax, 0x03 ; Quick n' dirty clear screen by setting video mode
 	int 0x10
+
+	in al, 0x92 ; Better explained in protectedMode.asm
+	or al, 2
+	out 0x92, al
 
 	cli ; Better explained in protectedMode.asm
 	lgdt [GDTInfo]

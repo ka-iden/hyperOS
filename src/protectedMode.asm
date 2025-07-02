@@ -1,6 +1,10 @@
 ; Entering Protected Mode
 ; Created: 1/07/2025
 ; Last Updated: 1/07/2025
+; Changelog:
+; - Added A20 line
+; TODO:
+; - Set up the IDT
 
 	use16 ; Use 16-bit mode, aka real mode
 	org 0x7c00 ; Set the origin to 0x7c00
@@ -29,6 +33,12 @@ startReal: ; Any code that needs to be run once goes below here and above the lo
 
 	mov bx, bits16 ; Function to print: 'Currently in 16-bit mode.'
 	call sprintLn16 ; Call the print function
+
+	; Enabling the A20 line via the Fast A20 Gate as described by the osdev wiki here:
+	; https://wiki.osdev.org/A20_Line#:~:text=in%20al%2C%200x92%0Aor%20al%2C%202%0Aout%200x92%2C%20al
+	in al, 0x92 ; Take in... something from the IBM PS/2?
+	or al, 2 ; Flip second bit, must be the A20 flag :sob:
+	out 0x92, al ; Send back :D
 
 	; Time to enter protected mode.
 	cli ; Clear interrupts
