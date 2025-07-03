@@ -1,16 +1,20 @@
-; Example File
+; Real Mode Example
 ; Created: 28/06/2025
-; Last Updated: 28/06/2025
+; Last Updated: 3/07/2025
 
 	use16 ; Use 16-bit mode
 	org 0x7c00 ; Set the origin to 0x7c00
 
+	mov ax, 0x03
+	int 0x10
+
 	jmp start
 
-%include "src/print.asm"
 start: ; Any code that needs to be run once goes below here and above the loop label.
 
-
+	mov al, 'A'
+	mov ah, 0x0e
+	int 0x10
 
 loop: ; Any code that needs to be run infinitely goes below here.
 
@@ -23,7 +27,5 @@ loop: ; Any code that needs to be run infinitely goes below here.
 	
 	int 0x19 ; Reboot
 
-endOfProgram: ; Never called, just sits here to fill the minimum 512 bytes some BIOSes require.
-	jmp $ ; Hang
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig

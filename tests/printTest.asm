@@ -11,7 +11,7 @@
 
 	jmp start
 
-%include "src/print16.asm"
+%include "funcs/print16.asm"
 start:
 	; Set Video Mode
 	; AL sets Size & Palette Registers

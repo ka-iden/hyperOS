@@ -43,15 +43,15 @@ DATA_SEG equ dataDescriptor - GDT
 	use32
 
 printChar32:
-    pusha
-    mov ebx, [screenOffset] ; Current offset in VGA memory
-    mov edx, 0xB8000 ; VGA base address
-    mov ah, 0x07 ; Light grey on black
-    mov [edx + ebx], ax ; Write character and attribute
-    add ebx, 2 ; advance cursor by one character (2 bytes)
-    mov [screenOffset], ebx ; save new offset
-    popa
-    ret
+	pusha
+	mov ebx, [screenOffset] ; Current offset in VGA memory
+	mov edx, 0xB8000 ; VGA base address
+	mov ah, 0x07 ; Light grey on black
+	mov [edx + ebx], ax ; Write character and attribute
+	add ebx, 2 ; advance cursor by one character (2 bytes)
+	mov [screenOffset], ebx ; save new offset
+	popa
+	ret
 
 ; I spent a very, very long time working this out with a LOT of trial and error and a few
 ; resources here:
@@ -63,10 +63,10 @@ printChar32:
 ; follow the thing? with a LOT of trial and error I found out that the PS/2 keyboard's third row is
 ; laid out like "..., k, l, ;, ', `, lshift, \". Also ' is 39, ` is 96.
 scancodeToAscii db 0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',  0
-				db     0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',  0
-				db      0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 39,  96, '\\'
-				db          'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',  0
-				db        0,  0,  ' ',  0,   0,   0,   0,   0,   0
+				db	   0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',  0
+				db		0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 39,  96, '\\'
+				db		'z','x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0
+				db		  0,  0,  ' ',  0,   0,   0,   0,   0,   0
 
 start: ; Start of actual bootloader
 loop:

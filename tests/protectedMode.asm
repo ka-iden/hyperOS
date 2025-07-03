@@ -11,7 +11,7 @@
 
 	jmp startReal ; jump over labels and instructions for printing
 
-%include "src/print16.asm"
+%include "funcs/print16.asm"
 
 startReal: ; Any code that needs to be run once goes below here and above the loop label.
 
