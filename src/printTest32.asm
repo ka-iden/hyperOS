@@ -12,10 +12,6 @@
 ; - lshift is printing backslash?? when holding down backslash, it properly repeats, but holding
 ; lshift only places one backslash, i'm going to make note of that.
 
-
-; TODO:
-; - Set up the IDT
-
 	use16
 	org 0x7c00
 
