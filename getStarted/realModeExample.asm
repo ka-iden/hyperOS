@@ -21,6 +21,8 @@ loop: ; Any code that needs to be run infinitely goes below here.
 
 
 ; End of loop, all loop code goes above this line.
+	mov ah, 0x00 ; Tell BIOS Interrupt to read key
+	int 0x16 ; Read key from keyboard
 
 	cmp al, 0x1b ; Check if escape key was pressed
 	jne loop ; If enter key was pressed, end program

@@ -43,11 +43,17 @@ loop: ; Any code that needs to be run infinitely goes below here.
 
 
 ; End of loop, all loop code goes above this line.
+.wait:
+	in al, 0x64 ; Read keyboard controller status register
+	test al, 1 ; Check if buffer full
+	jz .wait ; If not, keep waiting
 
-	cmp al, 0x1b ; Check if escape key was pressed
+	in al, 0x60 ; Read scancode from 0x60
+
+	cmp al, 0x01 ; Check if escape key was pressed
 	jne loop ; If enter key was pressed, end program
-	
-	int 0x19 ; Reboot
+
+	; No interrupts to restart os, but fallthrough restarts it ;^)
 
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig
