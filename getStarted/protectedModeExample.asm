@@ -39,19 +39,15 @@ start: ; Any code that needs to be run once goes below here and above the loop l
 	mov [0xb8000], ax
 
 loop: ; Any code that needs to be run infinitely goes below here.
-
-
-
-; End of loop, all loop code goes above this line.
-.wait:
 	in al, 0x64 ; Read keyboard controller status register
 	test al, 1 ; Check if buffer full
-	jz .wait ; If not, keep waiting
+	jz loop ; If not, keep waiting
 
 	in al, 0x60 ; Read scancode from 0x60
 
 	cmp al, 0x01 ; Check if escape key was pressed
 	jne loop ; If enter key was pressed, end program
+; End of loop, all loop code goes above this line.
 
 	; No interrupts to restart os, but fallthrough restarts it ;^)
 
