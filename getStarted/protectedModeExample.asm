@@ -1,4 +1,4 @@
-; Boot.asm
+; Protected Mode Example
 ; Created: 3/07/2025
 ; Last Updated: 3/07/2025
 
