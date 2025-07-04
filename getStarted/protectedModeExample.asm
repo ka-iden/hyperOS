@@ -1,4 +1,4 @@
-; Protected Mode Example
+; Boot.asm
 ; Created: 3/07/2025
 ; Last Updated: 3/07/2025
 
@@ -32,11 +32,12 @@ DATA_SEG equ dataDescriptor - GDT
 
 	use32
 
+%include "funcs/print32.asm"
 start: ; Any code that needs to be run once goes below here and above the loop label.
 
-	mov al, 'A'
-	mov ah, 0x07
-	mov [0xb8000], ax
+	mov esi, string
+	mov edi, offset
+	call sprintLn32
 
 loop: ; Any code that needs to be run infinitely goes below here.
 	in al, 0x64 ; Read keyboard controller status register
@@ -50,6 +51,9 @@ loop: ; Any code that needs to be run infinitely goes below here.
 ; End of loop, all loop code goes above this line.
 
 	; No interrupts to restart os, but fallthrough restarts it ;^)
+
+string db 'Hello, World!', 0
+offset db 0
 
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig
