@@ -49,8 +49,7 @@ loop: ; Any code that needs to be run infinitely goes below here.
 	jne loop ; If enter key was pressed, end program
 ; End of loop, all loop code goes above this line.
 
-	mov al, 0x00 ; 0x00 to reboot the system
-	out 0x604, al ; ACPI port for shutdown or reboot
+	; No interrupts to restart os, but fallthrough restarts it ;^)
 
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig
