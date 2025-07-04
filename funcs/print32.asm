@@ -43,8 +43,8 @@ sprintf32DONOTCALLDIRECTLY:
 	lodsb ; AL = [ESI], ESI++
 	cmp al, 0
 	je .done
-	mov [edx + ebx], al ; Write character at offset passed in
-	mov [edx + ebx + 1], ah ; Write attribute: colour
+	mov ah, 0x07 ; Set the colour to light grey, to match the 16-bit printing.
+	mov [edx + ebx], ax ; Write character at offset passed in
 	add ebx, 2 ; Advance offset by 2 bytes, mutates input
 	jmp .sprintfLoop
 .done:
