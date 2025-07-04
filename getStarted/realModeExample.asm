@@ -10,11 +10,11 @@
 
 	jmp start
 
+%include "funcs/print16.asm"
 start: ; Any code that needs to be run once goes below here and above the loop label.
 
-	mov al, 'A'
-	mov ah, 0x0e
-	int 0x10
+	mov si, string ; Move the address of the start of string into bx
+	call sprintLn16 ; Call sprintLn16 function, which will print each character and then a new line
 
 loop: ; Any code that needs to be run infinitely goes below here.
 	mov ah, 0x00 ; Tell BIOS Interrupt to read key
@@ -25,6 +25,8 @@ loop: ; Any code that needs to be run infinitely goes below here.
 ; End of loop, all loop code goes above this line.
 	
 	int 0x19 ; Reboot
+
+string db 'Hello, World!', 0 ; String to be printed
 
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig
