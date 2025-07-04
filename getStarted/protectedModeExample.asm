@@ -53,7 +53,7 @@ loop: ; Any code that needs to be run infinitely goes below here.
 	; No interrupts to restart os, but fallthrough restarts it ;^)
 
 string db 'Hello, World!', 0
-offset db 0
+offset dd 0
 
 	times 510 - ($-$$) db 0 ; Fills empty space with 0s
 	dw 0xaa55 ; Boot sector sig
