@@ -24,15 +24,17 @@ To build the project, you need to have the following tools installed:
 - [dd](https://www.gnu.org/software/coreutils/manual/html_node/dd-invocation.html) (for creating the bootable image)
 - [gcc (which includes ld)](https://gcc.gnu.org) (for compiling and linking C code, when we get there)
 
-Due to the fact that many tools such as `dd` are not available or have suitable replacements on Windows, I have switched to using WSL2 for building and running this project. If you are on any distribution of linux, you can move ahead and install the tools using your package manager.
+Due to the fact that many tools such as `dd` are not available or have suitable replacements on Windows, I have switched to using WSL2 for building and running this project.  
+If you are on any distribution of Linux, you can move ahead and install the tools using your package manager.
 
 ## Building
 
-To build the project, you can either use the provided `build.sh` script or run the commands manually. The script will assemble the `boot.asm` file, create a bootable image, and run it in QEMU.
+To build the project, you can either use the provided `build.sh` script or run the commands manually.  
+The script will assemble the `boot.asm` file, create a bootable image, and run it in QEMU.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.  
 NASM is licensed under the [Simplified BSD license](https://github.com/netwide-assembler/nasm/blob/master/LICENSE).  
 QEMU is licensed under the [GNU General Public License v2.0](https://gitlab.com/qemu-project/qemu/-/raw/master/LICENSE).  
 GNU Coreutils and Binutils (which include tools such as gcc, ld, and dd) are licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).  
