@@ -35,4 +35,4 @@ $DD if="$BUILD_DIR/stage2.bin" of="$IMG" bs=512 seek=1 conv=notrunc status=none
 
 # Run in QEMU
 echo "Launching QEMU..."
-exec $QEMU -drive format=raw,file="$IMG",if=floppy -boot order=a
+exec $QEMU -drive format=raw,file="$IMG",if=floppy -boot order=a -monitor stdio

@@ -1,53 +1,41 @@
-; Stage 1 of bootloader
-; Created: 5/07/2025
-; Last Updated: 5/07/2025
-
-	org 0x7c00
-	bits 16
-	jmp start
-
-%include "funcs/print16.asm"
-start:
+; === stage1.asm ===
+use16
+org 0x7C00
 
 	mov ax, 0x03
-	int 0x10 ; Rough clear screen
+	int 0x10
 
-	; BIOS loads us to 0x7C00, so set up the stack and segments
+	mov ah, 0x02 ; Function 2(?)
+	mov al, 1 ; Read 1 sector
+	mov ch, 0 ; Low 8 bytes of Cylinder (cylinder 0)
+	mov cl, 2 ; Sector 2
+	mov dh, 0 ; Head 0, top of head
+	mov dl, 0 ; Drive number, 0 = floppy
+	mov bx, 0x7E0
+	mov es, bx ; ES = 0x7e0
+	xor bx, bx ; BX = 0
+	int 0x13 ; Reads ES:BX, which for us is 0x7e0:0, which points to 0x7e00 somehow
+	jc disk_error
+
+	; Enable A20
+	in al, 0x92
+	or al, 2
+	out 0x92, al
+
+	; Protected mode switch
 	cli
-	xor ax, ax
-	mov ds, ax ; Set data segment to 0
-	mov es, ax ; Set extra segment to 0
-	mov ss, ax ; Set stack segment to 0
-	mov sp, 0x7c00 ; Set stack pointer to 0x7c00
-	sti
+	lgdt [GDTInfo]
+	mov eax, cr0
+	or eax, 1
+	mov cr0, eax
+	jmp CODE_SEG:0x7E00
 
-	mov si, stage1Msg1
-	call sprintLn16
-	mov si, stage1Msg2
-	call sprintLn16
+disk_error:
+	cli
+	hlt
+	jmp disk_error
 
-	; === BIOS int 13h read: load stage2.bin ===
-	; Load, say, 4 sectors from LBA 1 (CHS sector 2)
-	mov ah, 0x02 ; Function 02h - Read sectors
-	mov al, 4 ; Number of sectors to read
-	mov ch, 0 ; Cylinder
-	mov dh, 0 ; Head
-	mov cl, 2 ; Sector (CHS counts from 1!)
-	mov dl, 0 ; Drive (0 = floppy A)
-	mov bx, 0x7e00 ; Load address
-	int 0x13
-	jc diskError ; If carry flag set, read failed
+%include "src/GDT.asm"
 
-	jmp 0x0000:0x7e00 ; Jump to where stage 2 is loaded
-
-diskError:
-	mov si, diskMsg
-	call sprintLn16 ; Print read disk error
-	jmp $
-
-stage1Msg1 db 'Currently in stage 1.', 0
-stage1Msg2 db 'Starting to load stage 2...', 0
-diskMsg db 'Disk Read Error!', 0
-
-times 510 - ($ - $$) db 0
-dw 0xaa55
+times 510 - ($-$$) db 0
+dw 0xAA55

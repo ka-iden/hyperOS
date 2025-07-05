@@ -1,20 +1,29 @@
-; Stage 2 of bootloader
-; Created: 5/07/2025
-; Last Updated: 5/07/2025
+; === stage2.asm ===
+use32
+org 0x7E00
 
-	org 0x7e00
-	bits 16
 	jmp start
 
-%include "funcs/print16.asm"
-start:
-	mov si, stage2Msg1
-	call sprintLn16
-	call newLine16
-	mov si, stage2Msg2
-	call sprintLn16
-	jmp $
+%include "src/GDT.asm"
+%include "funcs/print32.asm"
 
-stage2Msg1 db 'Stage 2 loaded!', 0
-stage2Msg2 db 'Everything is working :D', 0
-; No 0xaa55 needed! no longer in bootsector :O
+start:
+	lgdt [GDTInfo] ; Make sure you load it again!
+
+	mov ax, DATA_SEG
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
+
+	mov esi, string
+	mov edi, offset
+	call sprintLn32
+
+.hang:
+	hlt
+	jmp .hang
+
+string db 'Test', 0
+offset dd 0
