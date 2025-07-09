@@ -4,12 +4,10 @@ org 0x7E00
 
 	jmp start
 
-%include "src/GDT.asm"
 %include "funcs/print32.asm"
+%include "src/GDT.asm"
 
 start:
-	lgdt [GDTInfo] ; Make sure you load it again!
-
 	mov ax, DATA_SEG
 	mov ds, ax
 	mov es, ax
@@ -17,7 +15,7 @@ start:
 	mov gs, ax
 	mov ss, ax
 
-	mov esi, string
+	mov esi, string32
 	mov edi, offset
 	call sprintLn32
 
@@ -25,5 +23,5 @@ start:
 	hlt
 	jmp .hang
 
-string db 'Test', 0
-offset dd 0
+string32 db 'Now in 32-bit mode.', 0
+offset dd 160 * 1
