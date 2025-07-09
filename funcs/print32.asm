@@ -1,7 +1,17 @@
 ; 32-bit BIOS Print Functions
 ; Created: 3/07/2025
-; Last Updated: 3/07/2025
+; Last Updated: 10/07/2025
+; Changelog:
+; - Removed a few push and pops from sprintf32DONOTCALLDIRECTLY
+; - Better explained how functions may be called
 
+; Do not call sprintf directly. use sprint, sprintLn, and newLine.
+
+; Functions take in the string's memory location into esi and an offset into video memory into edi.
+; Example call may look like this:
+; mov esi, string
+; mov edi, offset
+; call sprintLn32
 sprint32:
 	pusha
 	call sprintf32DONOTCALLDIRECTLY

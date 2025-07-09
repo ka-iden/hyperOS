@@ -1,14 +1,21 @@
 ; 16-bit BIOS Print Functions - From my old project found here: https://github.com/ka-iden/ASM-Test
 ; Created: 18/06/2023
-; Last updated: 1/07/2025
+; Last updated: 10/07/2025
 ; Changelog:
 ; - Removed hex and decimal printing functions.
 ; - Converted macros to functions.
 ; - Appended 16 to names to signify 16-bit
 ; - Went a bit overboard with the naming to signify that sprintf16 should not be called directly :^)
+; - Cleaned up newLine16 and removed a few push and pops
+; - Better explained how functions may be called
 
 ; Do not call sprintf directly. use sprint, sprintLn, and newLine.
 ; Functions to print a string, replaced the macros for higher code efficiency.
+
+; Functions take in the string's memory location into si
+; Example call may look like this:
+; mov si, string
+; call sprintLn16
 sprint16:
 	pusha
 	call sprintf16DONOTCALLDIRECTLY
