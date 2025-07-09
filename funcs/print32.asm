@@ -36,7 +36,6 @@ newLine32:
 
 ; Let's create a function that can print a string.
 sprintf32DONOTCALLDIRECTLY:
-	pusha
 	mov ebx, [edi] ; EBX = current offset
 	mov edx, 0xB8000 ; VGA text buffer base
 .sprintfLoop:
@@ -49,5 +48,4 @@ sprintf32DONOTCALLDIRECTLY:
 	jmp .sprintfLoop
 .done:
 	mov [edi], ebx ; Store updated offset back
-	popa
 	ret
