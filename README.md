@@ -1,3 +1,9 @@
+> [!CAUTION]
+> I have moved to [Codeberg.](https://codeberg.org/ka_iden) Repo has moved [here.](https://codeberg.org/ka_iden/hyperOS)  
+> Repo has been archived not because I won't touch it, but this also does not  
+> mean I will come back to this project any time soon, only that I want to  
+> avoid GitHub unless I need it, such as for contributions to other's projects.
+
 # hyperOS
 
 Making a little bootloader OS to test out some assembly.
@@ -38,3 +44,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 NASM is licensed under the [Simplified BSD license](https://github.com/netwide-assembler/nasm/blob/master/LICENSE).  
 QEMU is licensed under the [GNU General Public License v2.0](https://gitlab.com/qemu-project/qemu/-/raw/master/LICENSE).  
 GNU Coreutils and Binutils (which include tools such as gcc, ld, and dd) are licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).  
+
